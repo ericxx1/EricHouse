@@ -1,0 +1,9 @@
+require 'socket'
+ 
+server = TCPServer.new(1113)
+ 
+loop do
+  conn = server.accept
+  conn.puts("You have sucessfully connected to EricHouse")
+  conn.close
+end
