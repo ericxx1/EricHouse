@@ -63,12 +63,13 @@ require 'net/http'
 				  
 				     if(whois =~ /AREYOU/)
 				        verb, odest = whois.split(":")
-				           if odest == urpeer
+				           if odest = urpeer
 				           puts "THATS ME! :O"
 				           my_ip = IPAddr.new(get_ip)
 							puts my_ip
 				           peer.puts my_ip
 				         else
+				         puts odest
 				         puts "NOT ME :("
 				       end
 				    end   
@@ -84,8 +85,14 @@ require 'net/http'
 							name, dest, webport = contents.split(":")#web.site, PEERID, webserverport
 							puts "Attempting to find #{name} Peer: #{dest} Port: #{webport}"
 							puts "Sending AreYouPeer request throughout network"
-							#Send dest to each peer somehow
-							#peer.puts dest 
+							    peerlist = File.readlines("peers").each do |peers|
+								peers.strip
+								q = TCPSocket.new peers, @port
+								q.puts "AREYOU:#{dest}"
+								puts dest
+								answer = q.gets
+								puts answer
+							end
 						       else
 								 clen = whois.gsub("http://", "").gsub("HTTP/1.1", "").gsub(/\s+/, "").gsub("GET", "")
 								 site, subject = clen.split("/")#web.site, /file.html
@@ -124,8 +131,8 @@ require 'net/http'
 									  end
 								   end	  
 							ircservers = Thread.new do#New Thread
-							   if(whois =~ /CAP/)#This just identifies the connection as a IRC. I did it in a very gay way.
-								  irc = TCPSocket.open("irc.cmpct.info", "6667")#Opens a connection with the irc server
+							   if(whois =~ /CAP/ or whois =~ /NICK/)#This just identifies the connection as a IRC. I did it in a very gay way.
+								  irc = TCPSocket.open("irc.blockz.info", "6667")#Opens a connection with the irc server
 									irc.puts whois#Sends the nick to irc server
 									puts "Sent nickname to irc server"
 									user = peer.gets#Gets the Ident from client
@@ -152,16 +159,12 @@ require 'net/http'
 						   out = Thread.new do
 								puts "Attempting to connect to peer"
 								peerlist = File.readlines("peers").each do |peers|
-								peers.strip
 								sleep(5)
 								q = TCPSocket.new peers, @port
 								q.puts "PEER"
 								q.puts urpeer
 								outpeer = q.gets.chomp
 								puts "Connected to Peer #{outpeer}"
-								##NOT DONE PEERID 2##
-								#If peerID equals there peerID send back webserver info
-								#Connect to webserver
 								   end
 								end  
 local.join				
