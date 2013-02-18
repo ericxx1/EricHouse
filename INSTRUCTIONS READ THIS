@@ -1,0 +1,41 @@
+Hello new EricHouse user
+
+Here are the steps to begin using the EricHouse router
+
+1. If you do not have ruby, please install it
+
+2. Once ruby is installed run this command in the main directory:
+ruby dest.rb
+
+This will generate or override file called 'Destination.txt'
+
+3.Get your ip address from whatismyip.com and place it in the file
+called 'peers'
+Make sure not to leave any blank lines in the file
+
+4. Start the EricRouter by doing: ruby Ericrouter.rb
+
+5. If you followed the steps you should see your peer destination displayed
+your peer will start connecting and reciving fellow peers.
+
+
+Hosting a website
+1. If you want to host or claim a domain you can do this
+
+2. Figure out the domain name you want then go into the folder 'sites/'
+
+3. Make a empty file with the name of your domain. Example: root.pong
+
+4. Then in that file put in "website name:peer destination:port"
+So it would look like: 
+
+root.pong:-EH001-fcfe572795dbc2:1113
+
+5. Then really you now own that domain.
+
+6. There is not much you can do with this at the moment, but as soon as webservers
+are finished you can start using your website. You can also register any domain you
+would like.
+
+When we finish this, we will be working on a system where you can send out your new website
+information and if people like it, they will add it to there sites list :)
