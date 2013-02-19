@@ -91,7 +91,7 @@ local = Thread.new do
             puts "Attempting to find #{name} Port: #{webport}" 
             puts "Destination:#{dest}"
             peerlist = File.readlines("peers").each do |peers|
-              peers.strip
+              peers.chomp!
               q = TCPSocket.new peers, @port
               q.puts "AREYOU:#{dest}"
               answer = q.gets
