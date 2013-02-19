@@ -168,6 +168,7 @@ end
 out = Thread.new do
   puts "Attempting to connect to peer"
   peerlist = File.readlines("peers").each do |peers|
+    peers.chomp!
     sleep(5)
     q = TCPSocket.new peers, @port
     q.puts "PEER"
