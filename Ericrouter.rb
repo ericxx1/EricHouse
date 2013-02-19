@@ -33,7 +33,8 @@ require 'net/http'
 
       ip[0]
     end
-
+	my_ip = IPAddr.new(get_ip)
+	puts my_ip
 	Thread.abort_on_exception = true
 	@port = '4545'
 	urpeer = File.read("destination.txt").strip
@@ -63,12 +64,13 @@ require 'net/http'
 				  
 				     if(whois =~ /AREYOU/)
 				        verb, odest = whois.split(":")
-				           if odest = urpeer
+				           if urpeer == odest
 				           puts "THATS ME! :O"
-				           my_ip = IPAddr.new(get_ip)
+				           puts "Your peer ID is: #{urpeer}"
 							puts my_ip
 				           peer.puts my_ip
 				         else
+				         puts "Your peer ID is: #{urpeer}"
 				         puts odest
 				         puts "NOT ME :("
 				       end
@@ -83,15 +85,16 @@ require 'net/http'
 							puts site, subject
 							contents = File.read("sites/#{site}")
 							name, dest, webport = contents.split(":")#web.site, PEERID, webserverport
-							puts "Attempting to find #{name} Peer: #{dest} Port: #{webport}"
-							puts "Sending AreYouPeer request throughout network"
+							puts dest
+							puts "Attempting to find #{name} Port: #{webport}" 
+							puts "Destination:#{dest}"
 							    peerlist = File.readlines("peers").each do |peers|
 								peers.strip
 								q = TCPSocket.new peers, @port
 								q.puts "AREYOU:#{dest}"
-								puts dest
 								answer = q.gets
 								puts answer
+								peers.close
 							end
 						       else
 								 clen = whois.gsub("http://", "").gsub("HTTP/1.1", "").gsub(/\s+/, "").gsub("GET", "")
@@ -99,15 +102,15 @@ require 'net/http'
 								 puts site, subject
 								 contents = File.read("sites/#{site}")
 								 name, dest, webport = contents.split(":")#web.site, PEERID, webserverport
-								 puts "Attempting to find #{name} Peer: #{@dest} Port: #{webport}"
-								 puts "Sending AreYouPeer request throughout network"
-								peerlist = File.readlines("peers").each do |peers|
-								peers.strip
-								q = TCPSocket.new peers, @port
-								q.puts "AREYOU:#{dest}"
-								puts dest
-								answer = q.gets
-								puts answer
+								 puts "Attempting to find #{name} Port: #{webport}" 
+								 puts "Destination:#{dest}"
+							     peerlist = File.readlines("peers").each do |peers|
+							 	 peers.strip
+							     q = TCPSocket.new peers, @port
+								 q.puts "AREYOU:#{dest}"
+								 answer = q.gets
+								 puts answer
+								 peers.close
 								 end
 							   end
 						     end
@@ -132,7 +135,7 @@ require 'net/http'
 								   end	  
 							ircservers = Thread.new do#New Thread
 							   if(whois =~ /CAP/ or whois =~ /NICK/)#This just identifies the connection as a IRC. I did it in a very gay way.
-								  irc = TCPSocket.open("irc.blockz.info", "6667")#Opens a connection with the irc server
+								  irc = TCPSocket.open("irc.cmpct.info", "6667")#Opens a connection with the irc server
 									irc.puts whois#Sends the nick to irc server
 									puts "Sent nickname to irc server"
 									user = peer.gets#Gets the Ident from client
