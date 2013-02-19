@@ -28,7 +28,8 @@ end
 
 def get_ip
   con = Net::HTTP.new('checkip.dyndns.org', 80)
-  resp, body = con.get("/", nil)
+  resp = con.get("/")
+  body = resp.body
   ip = body.match(/\d+\.\d+\.\d+\.\d+/)
   
   ip[0]
