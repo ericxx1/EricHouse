@@ -96,6 +96,8 @@ local = Thread.new do
               q.puts "AREYOU:#{dest}"
               answer = q.gets
               puts answer
+              answer.chomp!
+              webport.chomp!
               q.close
               host = TCPsocket.open(answer, webport)
               contents = host.gets
@@ -116,7 +118,13 @@ local = Thread.new do
               q.puts "AREYOU:#{dest}"
               answer = q.gets
               puts answer
+              answer.chomp!
+              webport.chomp!
               q.close
+              host = TCPsocket.open(answer, webport)
+              host.puts whois
+              peer.puts contents
+              host.close
             end
           end
         end
