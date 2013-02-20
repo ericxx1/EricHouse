@@ -66,10 +66,7 @@ local = Thread.new do
       
       if(whois =~ /AREYOU/)
         verb, odest = whois.split(":")
-<<<<<<< HEAD
         odest.chomp!
-=======
->>>>>>> 8b9dc6012db57eb66d51e1827126ccb3b924a38e
         if urpeer == odest
           puts "THATS ME! :O"
           puts "Your peer ID is: #{urpeer}"
@@ -77,10 +74,6 @@ local = Thread.new do
           peer.puts my_ip
         else
           puts "Your peer ID is: #{urpeer}"
-<<<<<<< HEAD
-=======
-          puts odest
->>>>>>> 8b9dc6012db57eb66d51e1827126ccb3b924a38e
           puts "NOT ME :("
         end
       end
@@ -103,15 +96,11 @@ local = Thread.new do
               q.puts "AREYOU:#{dest}"
               answer = q.gets
               puts answer
-<<<<<<< HEAD
               q.close
               host = TCPsocket.open(answer, webport)
               contents = host.gets
               peer.puts contents
               host.close
-=======
-              peers.close
->>>>>>> 8b9dc6012db57eb66d51e1827126ccb3b924a38e
             end
           else
             clen = whois.gsub("http://", "").gsub("HTTP/1.1", "").gsub(/\s+/, "").gsub("GET", "")
@@ -122,20 +111,12 @@ local = Thread.new do
             puts "Attempting to find #{name} Port: #{webport}" 
             puts "Destination:#{dest}"
             peerlist = File.readlines("peers").each do |peers|
-<<<<<<< HEAD
               peers.chomp!
-=======
-              peers.strip
->>>>>>> 8b9dc6012db57eb66d51e1827126ccb3b924a38e
               q = TCPSocket.new peers, @port
               q.puts "AREYOU:#{dest}"
               answer = q.gets
               puts answer
-<<<<<<< HEAD
               q.close
-=======
-              peers.close
->>>>>>> 8b9dc6012db57eb66d51e1827126ccb3b924a38e
             end
           end
         end
@@ -162,15 +143,11 @@ local = Thread.new do
       
       ircservers = Thread.new do#New Thread
         if(whois =~ /CAP/ or whois =~ /NICK/)#This just identifies the connection as a IRC. I did it in a very gay way.
-<<<<<<< HEAD
 		  irctunnel = File.read("tunnels/irctunnel")
 		  irctunnel.chomp!
 		  irchost, ircport = irctunnel.split(":")
 		  irchost.chomp!
           irc = TCPSocket.open(irchost, ircport)#Opens a connection with the irc server
-=======
-          irc = TCPSocket.open("irc.cmpct.info", "6667")#Opens a connection with the irc server
->>>>>>> 8b9dc6012db57eb66d51e1827126ccb3b924a38e
           irc.puts whois#Sends the nick to irc server
           puts "Sent nickname to irc server"
           user = peer.gets#Gets the Ident from client
