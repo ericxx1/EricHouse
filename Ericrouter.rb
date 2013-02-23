@@ -10,7 +10,7 @@ module EricHouse
     def initialize
       @port = '4545'
       unless File.exist? 'destination.txt'
-        require_relative 'dest'
+        require_relative 'instructions/dest'
       end
       @urpeer = File.read 'destination.txt'
       get_my_ip
