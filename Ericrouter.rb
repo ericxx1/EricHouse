@@ -41,7 +41,11 @@ Thread.abort_on_exception = true
 @port = '4545'
 urpeer = File.read("destination.txt").strip
 puts '[' + purple("Your peer Destination is: ") + green(urpeer) + ']'
-
+def ipv7
+ipv = File.read("ip")
+puts "Your ipv7 address is #{ipv}"
+end
+ipv7
 ###########Start up your peer##############
 @socket = TCPServer.new @port
 s = @socket
