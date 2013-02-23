@@ -66,27 +66,15 @@ local = Thread.new do
       
       if(whois =~ /AREYOU/)
         verb, odest = whois.split(":")
-        odest, webport = odest.split("~")
-        puts odest, webport
         odest.chomp!
-        webport.chomp!
-        server = peer.gets
         if urpeer == odest
           puts "THATS ME! :O"
           puts "Your peer ID is: #{urpeer}"
-          puts server
-          webserver = TCPSocket.open('127.0.0.1', webport) 
-          webserver.puts server
-          mg = webserver.gets
-          peer.puts mg
-          #puts my_ip
-          #peer.puts my_ip
-          peer.close
+          puts my_ip
+          peer.puts my_ip
         else
-        peer.puts "NO"
           puts "Your peer ID is: #{urpeer}"
           puts "NOT ME :("
-          peer.close
         end
       end
       
@@ -96,8 +84,9 @@ local = Thread.new do
             clen = whois.gsub("http://", "").gsub("HTTP/1.1", "").gsub("www.", "").gsub(/\s+/, "").gsub("GET", "")
             puts clen
             site, subject = clen.split("/")#web.site, /file.html
+            network, site = site.split("-")
             puts site, subject
-            contents = File.read("sites/#{site}")
+            contents = File.read("networks/#{network}/#{site}")
             name, dest, webport = contents.split(":")#web.site, PEERID, webserverport
             puts dest
             puts "Attempting to find #{name} Port: #{webport}" 
@@ -105,16 +94,16 @@ local = Thread.new do
             peerlist = File.readlines("peers").each do |peers|
               peers.chomp!
               q = TCPSocket.new peers, @port
-              q.puts "AREYOU:#{dest}~#{webport}"
-              q.puts whois
+              q.puts "AREYOU:#{dest}"
               answer = q.gets
-              if(answer == "NO")
+              puts answer
+              answer.chomp!
+              webport.chomp!
               q.close
-              else
-              peer.puts answer
-              q.close
-              peer.close
-              end
+              host = TCPSocket.open(answer, webport)
+              contents = host.gets
+              peer.puts contents
+              host.close
             end
           else
             clen = whois.gsub("http://", "").gsub("HTTP/1.1", "").gsub(/\s+/, "").gsub("GET", "")
@@ -122,22 +111,21 @@ local = Thread.new do
             puts site, subject
             contents = File.read("sites/#{site}")
             name, dest, webport = contents.split(":")#web.site, PEERID, webserverport
-            puts dest
             puts "Attempting to find #{name} Port: #{webport}" 
             puts "Destination:#{dest}"
             peerlist = File.readlines("peers").each do |peers|
               peers.chomp!
               q = TCPSocket.new peers, @port
-              q.puts "AREYOU:#{dest}~#{webport}"
-              q.puts whois
+              q.puts "AREYOU:#{dest}"
               answer = q.gets
-              if(answer == "NO")
+              puts answer
+              answer.chomp!
+              webport.chomp!
               q.close
-              else
-              peer.puts answer
-              q.close
-              peer.close
-              end
+              host = TCPsocket.open(answer, webport)
+              host.puts whois
+              peer.puts contents
+              host.close
             end
           end
         end
@@ -170,14 +158,15 @@ local = Thread.new do
 		  irchost.chomp!
           irc = TCPSocket.open(irchost, ircport)#Opens a connection with the irc server
           irc.puts whois#Sends the nick to irc server
+          puts "Sent nickname to irc server"
           user = peer.gets#Gets the Ident from client
           irc.puts user#sends the ident to irc server
+          puts "Sent in ident"
           
           Thread.new do
             loop do#New loop
               server = irc.gets#Gets everything from server
               peer.puts server#Sends it to client
-              irc.close if server =~ /^\s*$/
             end
           end
           
