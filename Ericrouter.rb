@@ -12,9 +12,16 @@ module EricHouse
       unless File.exist? 'destination.txt'
         require_relative 'instructions/dest'
       end
+      unless File.exist? 'ip'
+        require_relative 'instructions/ipv7'
+      end
       @urpeer = File.read 'destination.txt'
+      @urpeer.chomp!
       get_my_ip
-      puts @my_ip
+      
+      puts "[Your real IP is:#{@my_ip}]"
+      ipv7 = File.read 'ip'
+      puts "[Your ipv7 is: #{ipv7}]"
       puts "[#{purple 'Your peer Destination is: '}#{green @urpeer}]"
       
       Thread.abort_on_exception = true
@@ -157,6 +164,7 @@ module EricHouse
       
       def out
         @out = Thread.new do
+        sleep(0.01)
           puts "Attempting to connect to peer"
           peerlist = File.readlines("peers").each do |peers|
             peers.chomp!
